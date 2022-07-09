@@ -52,7 +52,7 @@ while(True):
             r = requests.post(webhook_url, json=data)
             prices[url] = curr_price
         # print(curr_price, r.text)
-        # print(prices)
+        print(prices)
     time.sleep(3600)
 
 
