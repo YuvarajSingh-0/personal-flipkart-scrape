@@ -43,4 +43,4 @@ while(True):
         old_price = curr_price
     print(curr_price, r.text)
     # break
-    time.sleep(3)
+    time.sleep(3600)
