@@ -53,7 +53,7 @@ while(True):
             prices[url] = curr_price
         # print(curr_price, r.text)
         print(prices)
-    time.sleep(3600)
+    time.sleep(7200)
 
 
 # if __name__ == '__main__':
