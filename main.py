@@ -1,17 +1,12 @@
 import math
-# from flask import Flask
+import time
+import os
+import requests
+import random
 import time
 from dotenv import load_dotenv
-import os
-import random
-import requests
 from bs4 import BeautifulSoup
 load_dotenv()
-# app = Flask(__name__)
-
-
-# @app.route('/')
-# def load_page():
 
 products_url = ["https://dl.flipkart.com/s/Hod29OuuuN",
                 "https://www.flipkart.com/fastrack-analog-watch-men/p/itm7759c653a3b95", ]
