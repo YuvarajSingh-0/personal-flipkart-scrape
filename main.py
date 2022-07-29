@@ -4,19 +4,18 @@ import os
 import requests
 import random
 import time
+import json
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 load_dotenv()
 
-products_url = ["https://dl.flipkart.com/s/Hod29OuuuN",
-                "https://www.flipkart.com/fastrack-analog-watch-men/p/itm7759c653a3b95", ]
 webhook_url = os.environ.get('WEBHOOK_URL')
-prices = {}
-print(webhook_url)
-for product_url in products_url:
-    prices[product_url] = "₹0"
-# print(prices)
+
 while(True):
+    with open('links_prices.json', 'r') as f:
+        links_prices = json.load(f)
+        products_url = links_prices['products_url']
+        prices = links_prices['prices']
     for url in products_url:
         html_text = requests.get(url).text
         soup = BeautifulSoup(html_text, 'html.parser')
@@ -44,10 +43,12 @@ while(True):
                 },
                 ]
             }
+            with open('links_prices.json', 'w') as f:
+                links_prices['prices'][url] = curr_price
+                json.dump(links_prices, f)
+
             r = requests.post(webhook_url, json=data)
-            prices[url] = curr_price
-        # print(curr_price, r.text)
-        print(prices)
+    print("Sleeping for 2 hours...")
     time.sleep(7200)
 
 
