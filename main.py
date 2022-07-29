@@ -24,6 +24,7 @@ while(True):
         img_url = img['src']
         curr_price = soup.find(
             'div', {'class': "_30jeq3 _16Jk6d"}).text
+        print(f"{prices[url][0]} {prices[url][1:]}")
         if(curr_price != prices[url]):
             data = {
                 "content": "",
@@ -35,7 +36,7 @@ while(True):
                     },
                     "title": f"{title} \n \n ",
                     "url": f"{url}",
-                    "description": f"**Price** : `{curr_price}`   ~~`{prices[url]}`~~ \n \n **Link** -> [{title}]({url})'",
+                    "description": f"**Price** : `{curr_price}`   ~~`{prices[url][0]} {prices[url][1:]}`~~ \n \n **Link** -> [{title}]({url})'",
                     "color": math.floor(random.random() * 16777214) + 1,
                     "image": {
                         "url": f"{img_url}"
@@ -45,7 +46,7 @@ while(True):
             }
             with open('links_prices.json', 'w') as f:
                 links_prices['prices'][url] = curr_price
-                json.dump(links_prices, f)
+                json.dump(links_prices, f, indent=4)
 
             r = requests.post(webhook_url, json=data)
     print("Sleeping for 2 hours...")
