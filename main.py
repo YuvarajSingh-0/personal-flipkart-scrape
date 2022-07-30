@@ -49,7 +49,7 @@ while(True):
                 json.dump(links_prices, f, indent=4)
 
             r = requests.post(webhook_url, json=data)
-    print("Sleeping for 2 hours...")
+    print("Sleeping for 2 hours....")
     time.sleep(7200)
 
 
