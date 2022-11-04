@@ -11,10 +11,11 @@ load_dotenv()
 
 
 def lambda_handler(event, context):
+    pantry_url = f"https://getpantry.cloud/apiv1/pantry/{os.environ.get('PANTRYID')}/basket/links_prices"
     webhook_url = os.environ.get('WEBHOOK_URL')
-    json_object = requests.get(
-        'https://getpantry.cloud/apiv1/pantry/93e8808e-965e-4315-84d9-243cf2d62d9d/basket/links_prices')
-    links_prices = json.loads(json_object.text)
+    links_prices = requests.get(
+        pantry_url).json()
+    # links_prices = json.loads(json_object.text)
     products_url = links_prices['products_url']
     prices = links_prices['prices']
     for url in products_url:
@@ -48,16 +49,15 @@ def lambda_handler(event, context):
             }
             # with open('links_prices.json', 'w') as f:
             links_prices['prices'][url] = curr_price
-            x = requests.post(
-                'https://getpantry.cloud/apiv1/pantry/93e8808e-965e-4315-84d9-243cf2d62d9d/basket/links_prices', json=links_prices)
+            x = requests.post(pantry_url, json=links_prices)
             # json.dump(links_prices, f, indent=4)
             print(x.text)
 
             r = requests.post(webhook_url, json=data)
-    print("Sleeping for 2 hours....")
+    print("Sleeping for 4 hours....")
     # time.sleep(7200)
 
 
-# if __name__ == '__main__':
-#     lambda_handler(None, None)
+if __name__ == '__main__':
+    lambda_handler(None, None)
 #        app.run(port=os.getenv('PORT', 5000))
