@@ -11,11 +11,14 @@ load_dotenv()
 
 
 def lambda_handler(event, context):
-    pantry_url = f"https://getpantry.cloud/apiv1/pantry/{os.environ.get('PANTRYID')}/basket/links_prices"
+    pantryid = os.environ.get('PANTRYID')
+    pantry_url = str(
+        f"https://getpantry.cloud/apiv1/pantry/{pantryid}/basket/links_prices")
     webhook_url = os.environ.get('WEBHOOK_URL')
     links_prices = requests.get(
         pantry_url).json()
-    # links_prices = json.loads(json_object.text)
+    print(links_prices)
+    # links_prices = json.loads(links_prices.text)
     products_url = links_prices['products_url']
     prices = links_prices['prices']
     for url in products_url:
