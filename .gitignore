@@ -1,1 +1,4 @@
-webscraping
+*
+!Procfile
+!requirements.txt
+!scrape.py
