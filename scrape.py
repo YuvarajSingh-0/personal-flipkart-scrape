@@ -47,32 +47,37 @@ def lambda_handler(event, context):
                 },
                 ]
             }
-            r = requests.post(webhook_url, json=data)
-            return
-        if ((prices.get(url) != None) and (curr_price != prices[url])):
-            data = {
-                "content": "",
-                "username": "Spidey Bot",
-                "embeds": [{
-                    "author": {
-                        "name": "Price Change!",
-                        "icon_url": "https://i.imgur.com/R66g1Pe.jpg"
-                    },
-                    "title": f"{title} \n \n ",
-                    "url": f"{url}",
-                    "description": f"**Price** : `{curr_price}`   ~~`{prices[url][0]} {prices[url][1:]}`~~ \n \n **Link** -> [{title}]({url})'",
-                    "color": math.floor(random.random() * 16777214) + 1,
-                    "image": {
-                        "url": f"{img_url}"
-                    }
-                },
-                ]
-            }
             links_prices['prices'][url] = curr_price
             x = requests.post(pantry_url, json=links_prices)
-            print(x.text)
             r = requests.post(webhook_url, json=data)
-            print(r)
+            continue
+
+        if (curr_price == prices.get(url)):
+            continue
+
+        data = {
+            "content": "",
+            "username": "Spidey Bot",
+            "embeds": [{
+                "author": {
+                    "name": "Price Change!",
+                    "icon_url": "https://i.imgur.com/R66g1Pe.jpg"
+                },
+                "title": f"{title} \n \n ",
+                "url": f"{url}",
+                "description": f"**Price** : `{curr_price}`   ~~`{prices[url][0]} {prices[url][1:]}`~~ \n \n **Link** -> [{title}]({url})'",
+                "color": math.floor(random.random() * 16777214) + 1,
+                "image": {
+                    "url": f"{img_url}"
+                }
+            },
+            ]
+        }
+        links_prices['prices'][url] = curr_price
+        x = requests.post(pantry_url, json=links_prices)
+        print(x.text)
+        r = requests.post(webhook_url, json=data)
+        print(r)
     print("Sleeping for 4 hours....")
 
 
