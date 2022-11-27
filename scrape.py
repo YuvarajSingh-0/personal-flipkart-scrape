@@ -1,10 +1,8 @@
 import math
-import time
 import os
+import json
 import requests
 import random
-import time
-import json
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 load_dotenv()
@@ -18,7 +16,6 @@ def lambda_handler(event, context):
     links_prices = requests.get(
         pantry_url).json()
     print(links_prices)
-    # links_prices = json.loads(links_prices.text)
     products_url = links_prices['products_url']
     prices = links_prices['prices']
     for url in products_url:
@@ -29,9 +26,30 @@ def lambda_handler(event, context):
         img_url = img['src']
         curr_price = soup.find(
             'div', {'class': "_30jeq3 _16Jk6d"}).text
-        print(f"{prices[url][:]}")
+        # print(f"{prices[url][:]}")
         print(f"{curr_price}")
-        if (curr_price != prices[url]):
+        if (prices.get(url) == None):
+            data = {
+                "content": "",
+                "username": "Spidey Bot",
+                "embeds": [{
+                    "author": {
+                        "name": "Price Tracking started for this product",
+                        "icon_url": "https://i.imgur.com/R66g1Pe.jpg"
+                    },
+                    "title": f"{title} \n \n ",
+                    "url": f"{url}",
+                    "description": f"**Price** : `{curr_price}` \n \n **Link** -> [{title}]({url})'",
+                    "color": math.floor(random.random() * 16777214) + 1,
+                    "image": {
+                        "url": f"{img_url}"
+                    }
+                },
+                ]
+            }
+            r = requests.post(webhook_url, json=data)
+            return
+        if ((prices.get(url) != None) and (curr_price != prices[url])):
             data = {
                 "content": "",
                 "username": "Spidey Bot",
@@ -50,15 +68,12 @@ def lambda_handler(event, context):
                 },
                 ]
             }
-            # with open('links_prices.json', 'w') as f:
             links_prices['prices'][url] = curr_price
             x = requests.post(pantry_url, json=links_prices)
-            # json.dump(links_prices, f, indent=4)
             print(x.text)
-
             r = requests.post(webhook_url, json=data)
+            print(r)
     print("Sleeping for 4 hours....")
-    # time.sleep(7200)
 
 
 if __name__ == '__main__':
