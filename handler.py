@@ -26,7 +26,7 @@ def scrape(event, context):
         f"https://api.npoint.io/{pantryid}")
     webhook_url = os.environ.get('WEBHOOK_URL')
     links_prices = requests.get(pantry_url).json()
-    print(links_prices)
+    # print(links_prices)
 
     for item in links_prices:
         html_text = requests.get(item["url"]).text
@@ -37,7 +37,7 @@ def scrape(event, context):
         curr_price = soup.find(
             'div', {'class': "_30jeq3 _16Jk6d"}).text
         # print(f"{prices[url][:]}")
-        print(f"{curr_price}")
+        # print(f"{curr_price}")
         if (len(item.get("price")) == 0):
             data = {
                 "content": "",
@@ -86,7 +86,7 @@ def scrape(event, context):
         links_prices[index]["price"] = curr_price
         x = requests.post(pantry_url, json=links_prices)
         print(x.text)
-        r = requests.post(webhook_url, json=data) # type: ignore
+        r = requests.post(webhook_url, json=data)  # type: ignore
         print(r)
     print("Sleeping for 4 hours....")
     return {
