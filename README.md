@@ -1,82 +1,110 @@
-<!--
-title: 'AWS Python Example'
-description: 'This template demonstrates how to deploy a Python function running on AWS Lambda using the traditional Serverless Framework.'
-layout: Doc
-framework: v3
-platform: AWS
-language: python
-priority: 2
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
--->
 
+# Flipkart Price Notifier <img src="https://logos-world.net/wp-content/uploads/2020/11/Flipkart-Emblem.png" alt="Flipkart Logo" width="50" />
 
-# Serverless Framework AWS Python Example
+Flipkart Price Notifier is a tool that monitors the prices of products on Flipkart and notifies users of any price changes. It utilizes AWS Lambda service to trigger the price change checks and stores the updated prices in an online JSON cloud storage service called 'npoint.io'. Additionally, it sends notifications to Discord through Discord webhooks.
 
-This template demonstrates how to deploy a Python function running on AWS Lambda using the traditional Serverless Framework. The deployed function does not include any event definitions as well as any kind of persistence (database). For more advanced configurations check out the [examples repo](https://github.com/serverless/examples/) which includes integrations with SQS, DynamoDB or examples of functions that are triggered in `cron`-like manner. For details about configuration of specific `events`, please refer to our [documentation](https://www.serverless.com/framework/docs/providers/aws/events/).
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+
+## Introduction
+
+The Flipkart Price Notifier is designed to help users keep track of price changes for their favorite products on Flipkart. By utilizing AWS Lambda service, the tool periodically checks for price updates and compares them to previous prices. If a price change is detected, the new price is stored in an online JSON cloud storage service called 'npoint.io'. Additionally, the tool sends a notification to Discord through Discord webhooks, ensuring that users are promptly informed about any price variations.
+
+## Features
+
+- Automatic price change monitoring for Flipkart products
+- Integration with AWS Lambda for triggering price change checks
+- Storage of updated prices in an online JSON cloud storage service (npoint.io)
+- Notification to Discord via Discord webhooks
+
+## Tech Stack
+
+The Flipkart Price Notifier is built using the following technologies:
+
+- **Node.js**: Backend JavaScript runtime environment
+- **AWS Lambda**: Serverless compute service for running the price change checks
+- **Serverless Framework**: Open-source framework for building and deploying serverless applications
+- **npoint.io**: Online JSON cloud storage service for storing the updated prices
+- **Discord Webhooks**: Integration for sending notifications to Discord
+- **Git**: Version control system for collaboration and code management
+
+## Installation
+
+To install and set up the Flipkart Price Notifier, follow these steps:
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-username/flipkart-price-notifier.git
+   ```
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd flipkart-price-notifier
+   ```
+
+3. Install the required dependencies:
+
+   ```bash
+   npm install
+   ```
+
+4. Configure the AWS Lambda function:
+   - Create an AWS Lambda function and set it up to trigger periodically.
+   - Use the provided code in the repository's `lambda_function.js` file for the Lambda function code.
+   - Configure the necessary environment variables (e.g., Flipkart product URLs, Discord webhook URL, etc.).
+   - Set up any required AWS permissions and roles.
+
+5. Configure the npoint.io JSON cloud storage:
+   - Create an account on npoint.io.
+   - Obtain the API endpoint for your JSON data storage.
+
+6. Update the code with your configuration details:
+   - Open the `serverless.yaml` file and update the necessary variables (e.g., AWS Lambda function name, etc.).
+
+7. Deploy the AWS Lambda function and run the Flipkart Price Notifier.
 
 ## Usage
 
-### Deployment
+To use the Flipkart Price Notifier, follow these steps:
 
-In order to deploy the example, you need to run the following command:
+1. Ensure that the AWS Lambda function is running and triggering periodically.
 
+2. Whenever a price change is detected, the new price will be stored in the npoint.io JSON cloud storage.
+
+3. To receive Discord notifications, make sure you have set up a Discord webhook URL and configured it in the AWS Lambda function.
+
+4. Check your Discord channel for notifications whenever there is a price change.
+
+## Contributing
+
+Contributions are welcome! If you want to contribute to the Flipkart Price Notifier project, please follow these steps:
+
+1. Fork the repository.
+
+2. Create a new branch for your feature or bug fix:
+
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+3. Make your modifications and commit them with descriptive messages:
+
+   ```bash
+   git commit -m "Add your commit message here"
+   ```
+
+4. Push your changes to the new branch on your forked repository:
+
+   ```bash
+   git push origin feature/your-feature-name
+   ```
 ```
-$ serverless deploy
-```
-
-After running deploy, you should see output similar to:
-
-```bash
-Deploying aws-python-project to stage dev (us-east-1)
-
-✔ Service deployed to stack aws-python-project-dev (112s)
-
-functions:
-  hello: aws-python-project-dev-hello (1.5 kB)
-```
-
-### Invocation
-
-After successful deployment, you can invoke the deployed function by using the following command:
-
-```bash
-serverless invoke --function hello
-```
-
-Which should result in response similar to the following:
-
-```json
-{
-    "statusCode": 200,
-    "body": "{\"message\": \"Go Serverless v3.0! Your function executed successfully!\", \"input\": {}}"
-}
-```
-
-### Local development
-
-You can invoke your function locally by using the following command:
-
-```bash
-serverless invoke local --function hello
-```
-
-Which should result in response similar to the following:
-
-```
-{
-    "statusCode": 200,
-    "body": "{\"message\": \"Go Serverless v3.0! Your function executed successfully!\", \"input\": {}}"
-}
-```
-
-### Bundling dependencies
-
-In case you would like to include third-party dependencies, you will need to use a plugin called `serverless-python-requirements`. You can set it up by running the following command:
-
-```bash
-serverless plugin install -n serverless-python-requirements
-```
-
-Running the above will automatically add `serverless-python-requirements` to `plugins` section in your `serverless.yml` file and add it as a `devDependency` to `package.json` file. The `package.json` file will be automatically created if it doesn't exist beforehand. Now you will be able to add your dependencies to `requirements.txt` file (`Pipfile` and `pyproject.toml` is also supported but requires additional configuration) and they will be automatically injected to Lambda package during build process. For more details about the plugin's configuration, please refer to [official documentation](https://github.com/UnitedIncome/serverless-python-requirements).
+Make sure to replace `your-username` with your actual GitHub username and modify any other placeholders or URLs as required for your specific project.
