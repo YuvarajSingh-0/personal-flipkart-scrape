@@ -31,11 +31,21 @@ def scrape(event, context):
     for item in links_prices:
         html_text = requests.get(item["url"]).text
         soup = BeautifulSoup(html_text, 'html.parser')
-        title = soup.find('span', {'class': "B_NuCI"}).text
-        img = soup.find('img', {'class': "q6DClP"})
-        img_url = img['src']
-        curr_price = soup.find(
-            'div', {'class': "_30jeq3 _16Jk6d"}).text
+        
+        # Accessing the 'text' attribute (which is actually not an HTML attribute but the text content of a tag)
+        title = soup.find('span', {'class': "VU-ZEz"})
+        title = title.text if title else 'No title found'
+        
+        # Finding an 'img' tag and accessing its 'src' attribute
+        img = soup.find('img', {'class': "DByuf4 IZexXJ jLEJ7H"})
+        img_url = img['src'] if img else 'No image found'
+        
+        # Accessing the 'text' content of a 'div' tag
+        curr_price = soup.find('div', {'class': "Nx9bqj CxhGGd"}).text if soup.find('div', {'class': "Nx9bqj CxhGGd"}) else 'No price found'
+        
+        # Example of accessing other attributes, e.g., 'alt' of an image
+        img_alt = img['alt'] if img and 'alt' in img.attrs else 'No alt text'
+        
         # print(f"{prices[url][:]}")
         # print(f"{curr_price}")
         if (len(item.get("price")) == 0):
@@ -86,14 +96,15 @@ def scrape(event, context):
         links_prices[index]["price"] = curr_price
         x = requests.post(pantry_url, json=links_prices)
         print(x.text)
+        # print(data)
         r = requests.post(webhook_url, json=data)  # type: ignore
         print(r)
-    print("Sleeping for 4 hours....")
+    # print("Sleeping for 4 hours....")
     return {
         'statusCode': 200,
         'body': json.dumps('Check Done!')
     }
 
 
-# if __name__ == '__main__':
-#     scrape(None, None)
+if __name__ == '__main__':
+    scrape(None, None)
